@@ -41,12 +41,14 @@ foldersRouter
                 .json(serializeFolder(folder))
         })
         .catch(next)
+    })
 
 //GET, DELETE, UPDATE folder by id
 
     foldersRouter
         .route('/:folder_id')
         .all((req, res, next) => {
+            console.log(req.params.folder_id)
             FoldersService.getById(
                 req.app.get('db'),
                 req.params.folder_id
@@ -98,6 +100,6 @@ foldersRouter
                 })
                 .catch(next);
         })
-    })
+   
 
     module.exports = foldersRouter
