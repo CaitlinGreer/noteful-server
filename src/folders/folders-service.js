@@ -13,7 +13,7 @@ const FoldersService = {
             .then(rows => {
                 return rows[0]
             })
-    },
+    }, 
 
     getById(knex, id) {
         return knex
