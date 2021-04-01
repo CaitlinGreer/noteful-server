@@ -1,5 +1,4 @@
 const { NODE_ENV } = require('./config')
-const logger = require('./logger') 
 
 //Error handler middleware (hide error messages from users)
 function errorHandler(error, req, res, next) {
