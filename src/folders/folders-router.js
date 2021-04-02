@@ -48,7 +48,6 @@ foldersRouter
     foldersRouter
         .route('/:folder_id')
         .all((req, res, next) => {
-            console.log(req.params.folder_id)
             FoldersService.getById(
                 req.app.get('db'),
                 req.params.folder_id
@@ -85,7 +84,7 @@ foldersRouter
             if(numberOfValues === 0) {
                 return res.status(400).json({
                     error: {
-                        message: `Request body must contain either 'title', 'style' or 'content'`
+                        message: `Request body must contain 'folder name'`
                     }
                 })
             }
