@@ -5,7 +5,7 @@ const NotesService = {
             .from('noteful_notes')
     },
 
-    insertNotes(knex, newNotes) {
+    insertNote(knex, newNotes) {
         return knex
             .insert(newNotes)
             .into('noteful_notes')
@@ -23,8 +23,8 @@ const NotesService = {
             .first()
     },
 
-    deleteNotes(knex, id){
-        return knex
+    deleteNote(knex, id){
+        return knex('noteful_notes')
             .where({ id })
             .delete()       
     },

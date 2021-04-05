@@ -9,8 +9,8 @@ const jsonParser = express.json()
 const serializeNote = note => ({
     id: note.id,
     note_name: xss(note.note_name),
-    note_content: xss(note.content),
-    date_modified: note.date_modified,
+    note_content: xss(note.note_content),
+    modified: note.modified,
     folder_id: note.folder_id
 })
 
@@ -26,7 +26,7 @@ notesRouter
     })
 
     .post(jsonParser, (req, res, next) => {
-        const { note_name, note_content, folder_id } = req.body
+        const { note_name, modified, note_content, folder_id } = req.body
         const newNote = { note_name, note_content, folder_id }
 
         for(const [key, value] of Object.entries(newNote)) {
@@ -36,11 +36,15 @@ notesRouter
                 })
             }
         }
+        newNote.modified = modified
 
-    NotesService.insertNote(knexInstance, newNote)
+    NotesService.insertNote(
+        req.app.get('db'),
+        newNote
+        )
         .then(note =>{
             res.status(201)
-                .location(req.originalUrl + `/${note.id}`)
+                .location(path.posix.join(req.originalUrl + `/${note.id}`))
                 .json(serializeNote(note))
         })
         .catch(next)
