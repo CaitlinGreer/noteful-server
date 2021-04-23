@@ -90,8 +90,47 @@ describe('GET /api/folders', () => {
                     .expect(200, expectectFolder)
             })
         })
-
-    
     })
+    describe('POST /api/folders', () => { // POST 
+        it('creates a folder, responding with 201 and the new folder', () => { // CREATES A FOLDER
+          const newFolder = {
+            folder_name: 'New Test Folder'
+          }
+          return supertest(app)
+            .post('/api/folders')
+            .send(newFolder)
+            .expect(201)
+            .expect(res => {
+              expect(res.body.folder_name).to.eql(newFolder.folder_name)
+              expect(res.body).to.have.property('id')
+              expect(res.headers.location).to.eql(`/api/folders/${res.body.id}`)
+            })
+            .then(res => {
+              supertest(app)
+                .get(`/api/folders/${res.body.id}`)
+                .expect(res.body)
+            })
+        })
+    
+        const requiredFields = ['folder_name']
+    
+        requiredFields.forEach(field => {
+          const newFolders = {
+            folder_name: 'Test Folder'
+          }
+    
+          it(`Responds with 400 and an error when the ${field} is missing`, () => {
+            delete newFolders[field]
+    
+            return supertest(app)
+              .post('/api/folders')
+              .send(newFolders)
+              .expect(400, {
+                error: { message: `Missing ${field} in request body` }
+              })
+          })
+        }) 
+      })
+    
 })
 })
