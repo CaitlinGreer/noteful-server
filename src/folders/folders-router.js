@@ -35,14 +35,18 @@ foldersRouter
             }
         }
 
-    FoldersService.insertFolder(knexInstance, newFolder)
-        .then(folder =>{
-            res.status(201)
-                .location(req.originalUrl + `/${folder.id}`)
+        FolderService.insertFolder(
+            req.app.get('db'),
+            newFolder
+          )
+            .then(folder => {
+              res
+                .status(201)
+                .location(path.posix.join(req.originalUrl, `/${folder.id}`))
                 .json(serializeFolder(folder))
-        })
-        .catch(next)
-    })
+            })
+            .catch(next)
+      })
 
 //GET, DELETE, UPDATE folder by id
 
@@ -72,7 +76,7 @@ foldersRouter
                 req.app.get('db'),
                 req.params.folder_id
             )
-            .then(() => {
+            .then(numRowsAffected => {
                 res.status(204).end()
             })
             .catch(next)
