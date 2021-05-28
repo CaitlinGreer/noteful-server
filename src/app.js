@@ -23,7 +23,7 @@ app.use('/api/folders', foldersRouter)
 app.use('/api/notes', notesRouter)
 
 app.get('/', (req, res) => {
-    res.send('Hello, world!')
+    res.send('Hello, world! Noteful Server')
 })
 
 app.use(errorHandler)
